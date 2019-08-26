@@ -1,0 +1,29 @@
+{
+	"name": "Chess Enhancement Suite",
+	"version": "0.2",
+	"description": "Enhances your Chess.com experience!",
+	"manifest_version": 2,
+	"browser_action":{
+		"default_popup": "popup.html",
+		"default_icon":{
+			"48": "images/angryKnight48.png",
+			"128": "images/angryKnight128.png"
+		}
+	},
+	"permissions":["tabs", "storage", "activeTab"],
+	"background":{
+		"scripts":["PGNconverter.js", "eventHandler.js"],
+		"persistent": false
+	},
+	"content_scripts":[
+		{
+		"matches": ["*://www.chess.com/live*"],
+		"run_at":"document_idle",
+		"js": ["contentScript.js"]
+		}
+	],
+	"icons": {
+		"48": "images/angryKnight48.png",
+		"128": "images/angryKnight128.png"
+	}
+}
