@@ -15,7 +15,7 @@ Don't tell the boys at chess.com though, they won't be too happy if they find ou
 ***Seriously though you could totally get your chess.com account banned if you abuse this awesome feature***
 
 ### The possibilities are endless
-I'm just one guy with a passion for chess and for code who wants his extension to be as cool as possible.
+I'm just one guy with a passion for chess and code who wants his extension to be as cool as possible.
 I plan to continue adding features, such as:
 - graph rendering,
 - statistics,
