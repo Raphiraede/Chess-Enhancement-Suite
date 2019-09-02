@@ -1,4 +1,4 @@
-# Chess-Enhancement-Suite
+# Chess Enhancement Suite
 
 ## Enhance your chess.com experience with Chess Enhancement Suite!
 
