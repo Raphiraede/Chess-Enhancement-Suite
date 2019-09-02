@@ -17,10 +17,10 @@ Don't tell the boys at chess.com though, they won't be too happy if they find ou
 ### The possibilities are endless
 I'm just one guy with a passion for chess and for code who wants his extension to be as cool as possible.
 I plan to continue adding features, such as:
-graph rendering,
-statistics,
-data reading optimization,
-maybe even my very own chess engine :O (probably not)
+-graph rendering,
+-statistics,
+-data reading optimization,
+-maybe even my very own chess engine :O (probably not)
 
 ### Contact me!
 If you have any comments, suggestions, feedback, or job offers ;), please feel free to email me at raphiraede@gmail.com.
