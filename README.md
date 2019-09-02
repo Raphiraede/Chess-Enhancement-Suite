@@ -12,8 +12,8 @@ Chess Enhancement Suite automatically stores your game data for later analysis!
 ### Your secret is safe with us
 Open an analysis of your chess game **WHILE THE GAME IS IN PROGRESS!**
 With the power of Stockfish, the worlds strongest chess engine, at your fingertips, you literally can't be beat by any human.
-Don't tell the boys at chess.com though, they wouldn't be too happy if they found out.
-***Seriously though you could totally get your chess.com account banned if you use this awesome feature***
+Don't tell the boys at chess.com though, they won't be too happy if they find out.
+***Seriously though you could totally get your chess.com account banned if you abuse this awesome feature***
 
 ### The possibilities are endless
 I'm just one guy with a passion for chess and for code who wants his extension to be as cool as possible.
