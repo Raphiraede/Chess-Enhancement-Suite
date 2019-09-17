@@ -10,9 +10,9 @@
 			"128": "images/angryKnight128.png"
 		}
 	},
-	"permissions":["tabs", "storage", "activeTab"],
+	"permissions":["tabs", "storage", "activeTab", "https://lichess.org/paste"],
 	"background":{
-		"scripts":["PGNconverter.js", "eventHandler.js"],
+		"scripts":["PGNconverter.js", "lichessOpener.js", "eventHandler.js"],
 		"persistent": false
 	},
 	"content_scripts":[

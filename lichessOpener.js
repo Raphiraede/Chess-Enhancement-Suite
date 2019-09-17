@@ -1,5 +1,5 @@
-function openLichessAndPastePGN(PGN){
-	const tabId = openLichess();
+async function openLichessAndPastePGN(PGN){
+	const tabId = await openLichess();
 	//Will handle the PGN request which lichessScript.js will send.
 	chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
 		if (message === "PGNForLichessScript"){

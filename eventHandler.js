@@ -10,9 +10,6 @@
 chrome.runtime.onInstalled.addListener(function({OnInstalledReason = 'install'}){
 	let allGamesData = [];
 	chrome.storage.local.set({allGamesData:allGamesData});
-	chrome.storage.local.get('allGamesData', function(allGamesData){
-		console.log(allGamesData);
-	});
 });
 
 
@@ -24,18 +21,16 @@ chrome.runtime.onInstalled.addListener(function({OnInstalledReason = 'install'})
  *returnData is the object returned from storage.local.get. This is an object which contains allGamesData.
  *updatedAllGamesData is the returnData after freshGameData has been added. This is used to update allGamesData.
  */
-chrome.runtime.onMessage.addListener(function(data, sender) {
-		if(sender.tab){
-			const url = sender.tab.url;
-			if(url.substring(0, 26) === "https://www.chess.com/live"){
-				chrome.storage.local.get('allGamesData', function(allGamesData){
-					console.log("allGamesData:" + allGamesData);
-					let updatedData = allGamesData.push(data);
-					console.log("updatedData:" + updatedData);
-					chrome.storage.local.set({allGamesData:updatedData});
-				});
-			}
-		}
+chrome.runtime.onMessage.addListener(function(messengerObject) {
+	const message = messengerObject.message;
+	const data = messengerObject.data;
+	if(message === "STORENEWGAMEDATA"){
+		chrome.storage.local.get('allGamesData', function(storageObject){//chrome.storage.local.get doesn't provide allGamesData, it provides an object containing allGamesData
+			let allGamesData = storageObject.allGamesData;
+			allGamesData.push(data);
+			chrome.storage.local.set({allGamesData:allGamesData});
+		});
+	}
 });
 
 
@@ -45,19 +40,25 @@ chrome.runtime.onMessage.addListener(function(data, sender) {
  *First, query the tab running contentScript.js using URL.
  *sends request to content script for INPROGRESS game data.
  *Checks if data is good. If not, it is because game is not INPROGRESS.
- *If data is good
+ *If data is good, call openLichessAndPastePGN, found in lichessOpener.js
  *Currently this may not work if more than one chess.com/live tab is open.
  */
-chrome.runtime.onMessage.addListener(function(INPROGRESSAnalysisRequest){
-	if(INPROGRESSAnalysisRequest === "INPROGRESSAnalysisRequest"){
+chrome.runtime.onMessage.addListener(function(messengerObject, sender, sendResponse){
+	const message = messengerObject.message;
+	if(message === "INPROGRESSAnalysisRequest"){
 
 		const queryInfo = {url: "*://www.chess.com/live*"}
 		chrome.tabs.query(queryInfo, function(tabs){
+
 			const tabId = tabs[0].id;
-			const request = "INPROGRESSDataRequest";
-			chrome.tabs.sendMessage(tabId, request, function(currentGameData){
-				if (currentGameData != "gameIsNotINPROGRESS"){
-					const PGN = convertToPGN(currentGameData);
+			const messengerObject = {
+				message: "INPROGRESSDataRequest"
+			}
+
+			chrome.tabs.sendMessage(tabId, messengerObject, function(inProgressGameData){
+				if (inProgressGameData){
+
+					const PGN = convertToPGN(inProgressGameData);//Perhaps message handler shouldn't handle PGN conversion?
 					openLichessAndPastePGN(PGN);
 				}
 			});

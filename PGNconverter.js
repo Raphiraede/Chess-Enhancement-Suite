@@ -35,12 +35,13 @@ gameData = {
 
 //Not all of gameData is converted to PGN, because PGN format doesn't support things like winner, or primaryUsername
 //However, since comments are supported in PGN format, it is possible to include more data inside a comment
-function convertToPGN(gameData){
+function convertToPGN(gameDataWrapper){
+	const gameData = gameDataWrapper.inProgressGameData;
 	const white = gameData.whiteUser;
 	const black = gameData.blackUser;
 	const result = gameData.result;
 	const moves = convertMovesToSAN(gameData.moves);
-	const revivedDate = reviveDate(this.data.date);
+	const revivedDate = reviveDate(gameData.date);
 	const PGNDate = convertDateToPGN(revivedDate);
 
 	let PGN = ''

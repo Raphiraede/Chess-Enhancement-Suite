@@ -38,7 +38,7 @@ function ChessGame(){
 
 		/*Finite State Machine*/
 	/*Basically the backbone of the code, keeping track of game state and recording data along the way*/
-	/*At the conclusion of a game, sends ChessGame.data to Controller.js*/
+	/*At the conclusion of a game, sends ChessGame.data to eventHandler.js*/
 ChessGame.prototype.checkGameState = function(){
 	switch(this.state){
 
@@ -52,7 +52,6 @@ ChessGame.prototype.checkGameState = function(){
 					this.data.date = new Date();
 					this.data.result = "*"; //In PGN format, * means the game is ongoing.
 					this.state = ChessGameState.INPROGRESS;
-					console.log("New game has started")
 				}
 			}
 		break;
@@ -65,30 +64,16 @@ ChessGame.prototype.checkGameState = function(){
 					this.updateMoves();
 					this.updateOpening();
 					this.state = ChessGameState.ENDED;
-					console.log("Game has Ended");
 				}
 				else{
-					this.resetChessGame();
+					this.resetChessGameData();
+					this.updateUserTimer();
 					this.state = ChessGameState.NOTSTARTED;
 				}
 			}
 		break;
 
 		case ChessGameState.ENDED: //Records ChessGame.data and immediately changes state to NOTSTARTED
-			console.table([
-			["primary username", this.data.primaryUsername],
-			["opponent username", this.data.opponentUsername],
-			["white user", this.data.whiteUser],
-			["black user", this.data.blackUser],
-			["date", this.data.date],
-			["winner", this.data.winner],
-			["loser", this.data.loser],
-			["moves", this.data.moves],
-			["opening", this.data.opening],
-			["result", this.data.result]
-			]);
-			console.log(this.data.moves);
-			console.log(this.data.date);
 			this.sendDataToController();
 			this.resetChessGameData();
 			//this.updateUserTimer is called again to prevent this.timerHasTicked from returning true again after the game has ended,
@@ -111,7 +96,6 @@ ChessGame.prototype.timerHasTicked = function(){
 	if (currentTime){
 		if(this.userTimer){
 			if(this.userTimer > currentTime.innerHTML){
-				console.log("timer has ticked");
 				this.updateUserTimer();
 				return true;
 			}
@@ -134,7 +118,6 @@ ChessGame.prototype.updateUsernames = function(){
 		return true;
 	}
 	else{
-		console.log("usernames not updated");
 		return false;
 	}
 }
@@ -152,7 +135,6 @@ ChessGame.prototype.updateColors = function(){
 		return true;
 	}
 	else{
-		console.log("colors not updated");
 		return false;
 	}
 }
@@ -211,24 +193,20 @@ ChessGame.prototype.updateGameOutcome = function(){
  			this.data.winner = this.data.primaryUsername;
  			this.data.loser = this.data.opponentUsername;
  			this.data.result = (this.data.primaryUsername === this.data.whiteUser)? "1-0" : "0-1";
- 			console.log("You won! :D");
  			return true;
  		}
  		else if (endscreenTitle === "White Won" || endscreenTitle === "Black Won"){
  			this.data.winner = this.data.opponentUsername;
  			this.data.loser = this.data.primaryUsername;
  			this.data.result = (this.data.primaryUsername === this.data.whiteUser)? "0-1" : "1-0";
- 			console.log("You lost D:");
  			return true;
  		}
  		else if(endscreenTitle === "Draw"){
  			this.data.winner = "draw";
  			this.data.loser = "draw";
  			this.data.result = "1/2-1/2";
- 			console.log("draw");
  		}
  		else if (endscreenTitle === "Game Aborted"){
- 			console.log("Game Aborted");
  			return false;
  		}
 }
@@ -250,7 +228,11 @@ ChessGame.prototype.resetChessGameData = function(){
 //Remember that date objects do NOT survive JSONification, which is used for sendMessage. They must be revived later on
 ChessGame.prototype.sendDataToController = function(){
 	const data = this.data;
-	chrome.runtime.sendMessage(undefined, data);
+	const messengerObject = {
+		message: "STORENEWGAMEDATA",
+		data: data
+	}
+	chrome.runtime.sendMessage(undefined, messengerObject);
 }
 
 ChessGame.prototype.startRecording = function(){
@@ -271,10 +253,21 @@ const testData = {
 	date: new Date()
 }
 
-var chessGame = new ChessGame();
-//Implement onMessage for INPROGRESS game analysis
+//@TODO Add a wait for page loaded
+let chessGame = new ChessGame();
+
+//This message handler handles request for incomplete dataset of an INPROGRESS game
+chrome.runtime.onMessage.addListener(function (messengerObject, sender, sendResponse) {
+	const message = messengerObject.message;
+	if(message === "INPROGRESSDataRequest"){
+		const data = chessGame.data
+		let inProgressGameData = (chessGame.state === ChessGameState.INPROGRESS) ? data : undefined; //Response will be set to undefined if game is not in progress
+		sendResponse({inProgressGameData})
+	}
+	
+});
 //chrome.runtime.sendMessage(undefined, testData);
-//chessGame.startRecording();
+chessGame.startRecording();
 
 //JSON.parse JSON.stringify, reviver function for dates
 //make sure you optimize for reads. rendering graphs is something you want a library for. D3 is one, but look for a more modern one.
