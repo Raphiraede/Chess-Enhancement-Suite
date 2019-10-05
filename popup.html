@@ -4,13 +4,25 @@
       <style>
         button {
           height: 30px;
-          width: 30px;
-          outline: none;
+          width: 50px;
+          font-size: 10px;
+          text-align: center;
+        }
+
+        #popupWindow {
+          height: 400px;
+          width: 250px;
         }
       </style>
     </head>
     <body>
-      <button id='INPROGRESSAnalysis'>Analysis</button>
+      <div id=popupWindow>
+          <button id='INPROGRESSAnalysis'>Analysis</button>
+          <div id="listOfGames">
+            <h1>Get Last Game</h1>
+          </div>
+      </div>
+
       <script src="popup.js"></script>
     </body>
   </html>
