@@ -259,7 +259,7 @@ let chessGame = new ChessGame();
 //This message handler handles request for incomplete dataset of an INPROGRESS game
 chrome.runtime.onMessage.addListener(function (messengerObject, sender, sendResponse) {
 	const message = messengerObject.message;
-	if(message === "INPROGRESSDataRequest"){
+	if(message === "INPROGRESSANALYSISREQUEST"){
 		const data = chessGame.data
 		let inProgressGameData = (chessGame.state === ChessGameState.INPROGRESS) ? data : undefined; //Response will be set to undefined if game is not in progress
 		sendResponse({inProgressGameData})
@@ -268,12 +268,3 @@ chrome.runtime.onMessage.addListener(function (messengerObject, sender, sendResp
 });
 //chrome.runtime.sendMessage(undefined, testData);
 chessGame.startRecording();
-
-//JSON.parse JSON.stringify, reviver function for dates
-//make sure you optimize for reads. rendering graphs is something you want a library for. D3 is one, but look for a more modern one.
-//use const and let instead of var
-//use vscode
-//replace for loop x with i
-//generally you send it to controller, which creates models out of it
-//SQLite. you need an instance of this running on the internet.
-//mySQL, mangoDB
