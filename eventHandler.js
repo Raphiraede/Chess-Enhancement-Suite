@@ -16,14 +16,14 @@ function storeNewGameData(newGameData) {
 
 function analyseInProgressGame(messengerObject){
 	const queryInfo = {url: "*://www.chess.com/live*"}
-	chrome.tabs.query(queryInfo, function(tabs){
+	chrome.tabs.query(queryInfo, (tabs) => {
 
 		const tabId = tabs[0].id;
 		const messengerObject = {
 			message: "INPROGRESSANALYSISREQUEST"
 		}
 
-		chrome.tabs.sendMessage(tabId, messengerObject, function(inProgressGameData){
+		chrome.tabs.sendMessage(tabId, messengerObject, (inProgressGameData) => {
 			if (inProgressGameData){
 
 				const PGN = convertToPGN(inProgressGameData);//Perhaps message handler shouldn't handle PGN conversion?
@@ -46,15 +46,7 @@ chrome.runtime.onMessage.addListener((messengerObject) => {
 	}
 });
 
-	/*Handles message sent from popup.js requesting a lichess analysis of an INPROGRESS game*/
-/*
- *First, query the tab running contentScript.js using URL.
- *sends request to content script for INPROGRESS game data.
- *Checks if data is good. If not, it is because game is not INPROGRESS.
- *If data is good, call openLichessAndPastePGN, found in lichessOpener.js
- *Currently this may not work if more than one chess.com/live tab is open.
- */
-
+//Handles message sent from popup.js requesting a lichess analysis of an INPROGRESS game
 chrome.runtime.onMessage.addListener(function(messengerObject, sender, sendResponse){
 	if(messengerObject.message === "INPROGRESSANALYSISREQUEST"){
 		analyseInProgressGame();
