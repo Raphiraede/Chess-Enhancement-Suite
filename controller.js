@@ -1,9 +1,5 @@
 	/*This file handles the install and handles messages. Uses functions from seperate background script files.*/
 
-/*
- *The only message NOT handled in this file is the PGN request from the programatically injected lichessScript.js.
- *That PGN request is handled by lichessOpener.js
- */
 function storeNewGameData(newGameData) {
 	chrome.storage.local.get("allGamesData", (allGamesDataWrapper) => {
 		let allGamesData = allGamesDataWrapper.allGamesData;
