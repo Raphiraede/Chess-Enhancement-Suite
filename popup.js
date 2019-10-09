@@ -1,5 +1,5 @@
 
-//This message request is handled by eventHandler.js, which then requests it from contentScript
+//This message request is handled by controller.js, which then requests it from contentScript
 function requestAnalysisForINPROGRESSGame(){
 	const messengerObject = {
 		message: "INPROGRESSANALYSISREQUEST"
@@ -10,19 +10,29 @@ function requestAnalysisForINPROGRESSGame(){
 function constructGameList(allGamesData){
 	let gameList = document.createElement("ul");
 	for (let i = allGamesData.length-1; i >= 0; i--){
-		let listElementTextContent = constructListElementTextContent(allGamesData[i]);
+		let listItemTextContent = constructListItemTextContent(allGamesData[i]);
 		let gameListItem = document.createElement("li");
-		gameListItem.textContent = listElementTextContent;
+		gameListItem.textContent = listItemTextContent;
+		gameListItem.id = allGamesData[i].id
+		function handleClick() {
+			const messengerObject = {
+				message: "ANALYSESTOREDGAME",
+				data: this.getAttribute("id")
+			}
+			chrome.runtime.sendMessage(undefined, messengerObject);
+		}
+		//gameListItem.addEventListener("click", handleClick);
+		gameListItem.onclick = handleClick;
 		gameList.appendChild(gameListItem);
 	}
+
 	return gameList;
 }
 
-function constructListElementTextContent(gameData) {
-	console.log(gameData.date);
+function constructListItemTextContent(gameData) {
 	const date = new Date(gameData.date);
-	const listElementTextContent = `${gameData.whiteUser} vs. ${gameData.blackUser}, ${date}`
-	return listElementTextContent;
+	const listItemTextContent = `${gameData.whiteUser} vs. ${gameData.blackUser}, ${date}`
+	return listItemTextContent;
 }
 
 let INPROGRESSAnalysisRequest = document.querySelector("#INPROGRESSAnalysis");

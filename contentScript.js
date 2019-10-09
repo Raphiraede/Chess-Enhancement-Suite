@@ -38,7 +38,7 @@ function ChessGame(){
 
 //Finite State Machine (cool name eh?)
 //This is basically the backbone of the code, keeping track of game state and recording data along the way
-//At the conclusion of a game, sends ChessGame.data to eventHandler.js
+//At the conclusion of a game, sends ChessGame.data to controller.js
 ChessGame.prototype.checkGameState = function(){
 	switch(this.state){
 
@@ -79,8 +79,7 @@ ChessGame.prototype.checkGameState = function(){
 		case ChessGameState.ENDED:
 			this.sendDataToController();
 			this.resetChessGameData();
-			//this.updateUserTimer is called again to prevent this.timerHasTicked from returning true again after the game has ended,
-			//which would cause the same game to be recorded twice.
+			//this.updateUserTimer is called again to prevent this.timerHasTicked from returning true again after the game has ended, which would cause the same game to be recorded twice.
 			this.updateUserTimer();
 			this.state = ChessGameState.NOTSTARTED;
 		break;

@@ -11,6 +11,13 @@ function storeNewGameData(newGameData) {
 	});
 }
 
+function analyseStoredGame(gameID) {
+	chrome.storage.local.get("allGamesData", (allGamesDataWrapper) => {
+		let gameData = allGamesDataWrapper.allGamesData[gameID];
+		const PGN = convertToPGN(gameData);
+		openLichessAndPastePGN(PGN);
+	})
+}
 
 
 
@@ -23,10 +30,10 @@ function analyseInProgressGame(messengerObject){
 			message: "INPROGRESSANALYSISREQUEST"
 		}
 
-		chrome.tabs.sendMessage(tabId, messengerObject, (inProgressGameData) => {
-			if (inProgressGameData){
-
-				const PGN = convertToPGN(inProgressGameData);//Perhaps message handler shouldn't handle PGN conversion?
+		chrome.tabs.sendMessage(tabId, messengerObject, (inProgressGameDataWrapper) => {
+			if (inProgressGameDataWrapper){
+				const inProgressGameData = inProgressGameDataWrapper.inProgressGameData
+				const PGN = convertToPGN(inProgressGameData);
 				openLichessAndPastePGN(PGN);
 			}
 		});
@@ -65,6 +72,10 @@ chrome.runtime.onMessage.addListener((messengerObject, sender, sendResponse) => 
 
 		case "INPROGRESSANALYSISREQUEST":
 			analyseInProgressGame();
+		break;
+
+		case "ANALYSESTOREDGAME":
+			analyseStoredGame(messengerObject.data);
 		break;
 	}
 })

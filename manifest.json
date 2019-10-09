@@ -12,7 +12,7 @@
 	},
 	"permissions":["tabs", "storage", "activeTab", "https://lichess.org/paste"],
 	"background":{
-		"scripts":["PGNconverter.js", "lichessOpener.js", "eventHandler.js"],
+		"scripts":["PGNconverter.js", "lichessOpener.js", "controller.js"],
 		"persistent": false
 	},
 	"content_scripts":[
