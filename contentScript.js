@@ -3,7 +3,7 @@
  *Scrapes Data into ChessGame object
  *Uses Finite State Machine to track game state
  *At the conclusion of a chess game,sends data to messageHandler.js, where the data is recorded.
- *Can send back an incomplete this.data object, which will include enough data to create a PGN
+ *Can send back an incomplete this.data object, which will include enough data to create a PGN, allowing the user to analyze a current board state mid-game
  */
 
  //Possible game states for ChessGame
@@ -31,18 +31,19 @@ function ChessGame(){
 
 	//These variable help in tracking the game state
 	this.userTimer = undefined;
-	this.opponentTimer = undefined; //not yet implemented, tracking userTimer will do for now
+	this.opponentTimer = undefined; //not yet implemented, just tracking userTimer will do for now
 	this.state = ChessGameState.NOTSTARTED;
 }
 
 
-		/*Finite State Machine*/
-	/*Basically the backbone of the code, keeping track of game state and recording data along the way*/
-	/*At the conclusion of a game, sends ChessGame.data to eventHandler.js*/
+//Finite State Machine (cool name eh?)
+//This is basically the backbone of the code, keeping track of game state and recording data along the way
+//At the conclusion of a game, sends ChessGame.data to eventHandler.js
 ChessGame.prototype.checkGameState = function(){
 	switch(this.state){
 
-		case ChessGameState.NOTSTARTED: //Checks if timer has ticked to determine game start. usernames, colors, and date recorded here
+		//Checks if timer has ticked to determine game start. usernames, colors, and date recorded here
+		case ChessGameState.NOTSTARTED:
 			if(this.timerHasTicked()){
 				//these are boolean values, they do NOT contain the updated usernames or colors.
 				const usernamesHaveUpdated = this.updateUsernames();
@@ -56,8 +57,9 @@ ChessGame.prototype.checkGameState = function(){
 			}
 		break;
 
-		case ChessGameState.INPROGRESS: //checks for endscreen to determine game end. moves and opening recorded here.
-			this.updateMoves();//Moves are constantly overwritten in case PGN needs to be made mid-game.
+		//checks for endscreen to determine game end. moves and opening recorded here.
+		case ChessGameState.INPROGRESS:
+			this.updateMoves();
 			if(this.gameHasEnded()){
 				const gameWasNotAborted = this.updateGameOutcome();
 				if(gameWasNotAborted){
@@ -73,7 +75,8 @@ ChessGame.prototype.checkGameState = function(){
 			}
 		break;
 
-		case ChessGameState.ENDED: //Records ChessGame.data and immediately changes state to NOTSTARTED
+		//Records ChessGame.data and immediately changes state to NOTSTARTED
+		case ChessGameState.ENDED:
 			this.sendDataToController();
 			this.resetChessGameData();
 			//this.updateUserTimer is called again to prevent this.timerHasTicked from returning true again after the game has ended,
@@ -83,11 +86,10 @@ ChessGame.prototype.checkGameState = function(){
 		break;
 	}
 
-		/*checkGameState called recursively 5 times per second*/
-	const self = this; //this fixes issue with setTimeout callback function scope
-	setTimeout(function(){
-		self.checkGameState();
-	}, 200);//checkGameState called 5 times per second
+	//checkGameState called recursively 5 times per second
+	setTimeout(() => {
+		this.checkGameState();
+	}, 200);
 }
 
 
@@ -225,7 +227,6 @@ ChessGame.prototype.resetChessGameData = function(){
 	this.data.result = undefined;
 }
 
-//Remember that date objects do NOT survive JSONification, which is used for sendMessage. They must be revived later on
 ChessGame.prototype.sendDataToController = function(){
 	const data = this.data;
 	const messengerObject = {
@@ -239,19 +240,6 @@ ChessGame.prototype.startRecording = function(){
 	this.checkGameState();
 }
 
-/*TestData only to be used for debugging purposes, no reason for this to be used anywhere else*/
-const testData = {
-	primaryUsername: "testUsername",
-	opponentUsername: "testOpponent",
-	whiteUser: "testWhite",
-	blackUser: "testBlack",
-	opening: "testOpening",
-	moves: ["d4", "Nf6", "1-0"],
-	winner: "testWinner",
-	loser: "testUser",
-	result: "1-0", // 1-0 is a win for white, 0-1 is a win for black, 1/2-1/2 is a draw, and * means game is ongoing
-	date: new Date()
-}
 
 //@TODO Add a wait for page loaded
 let chessGame = new ChessGame();
@@ -266,5 +254,4 @@ chrome.runtime.onMessage.addListener(function (messengerObject, sender, sendResp
 	}
 	
 });
-//chrome.runtime.sendMessage(undefined, testData);
 chessGame.startRecording();
