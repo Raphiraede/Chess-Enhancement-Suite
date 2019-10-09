@@ -7,6 +7,24 @@ function requestAnalysisForINPROGRESSGame(){
 	chrome.runtime.sendMessage(messengerObject);
 };
 
+function constructGameList(allGamesData){
+	let gameList = document.createElement("ul");
+	for (let i = allGamesData.length-1; i >= 0; i--){
+		let listElementTextContent = constructListElementTextContent(allGamesData[i]);
+		let gameListItem = document.createElement("li");
+		gameListItem.textContent = listElementTextContent;
+		gameList.appendChild(gameListItem);
+	}
+	return gameList;
+}
+
+function constructListElementTextContent(gameData) {
+	console.log(gameData.date);
+	const date = new Date(gameData.date);
+	const listElementTextContent = `${gameData.whiteUser} vs. ${gameData.blackUser}, ${date}`
+	return listElementTextContent;
+}
+
 let INPROGRESSAnalysisRequest = document.querySelector("#INPROGRESSAnalysis");
 INPROGRESSAnalysisRequest.addEventListener("click", requestAnalysisForINPROGRESSGame);
 
@@ -16,12 +34,9 @@ chrome.runtime.sendMessage(undefined, {message: "HYDRATEPOPUP"})
 
 chrome.runtime.onMessage.addListener(messengerObject => {
 	if(messengerObject.message === "CONSTRUCTGAMELIST"){
-		const gameListData = messengerObject.data
-		let gameList = document.querySelector("#listOfGames");
-		gameListData.forEach(gameObject => {
-			let gameListItem = document.createElement("p");
-			gameListItem.textContent = gameObject.primaryUsername;
-			gameList.appendChild(gameListItem)
-		})
+		const allGamesData = messengerObject.data
+		let gameListContainer = document.querySelector("#listOfGamesContainer");
+		let gameList = constructGameList(allGamesData);
+		gameListContainer.appendChild(gameList);
 	}
 });
