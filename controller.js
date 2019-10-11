@@ -20,24 +20,23 @@ function analyseStoredGame(gameID) {
 	})
 }
 
-
-
 function analyseInProgressGame(messengerObject){
 	const queryInfo = {url: "*://www.chess.com/live*"}
 	chrome.tabs.query(queryInfo, (tabs) => {
-
-		const tabId = tabs[0].id;
-		const messengerObject = {
-			message: "INPROGRESSANALYSISREQUEST"
-		}
-
-		chrome.tabs.sendMessage(tabId, messengerObject, (inProgressGameDataWrapper) => {
-			if (inProgressGameDataWrapper.inProgressGameData){ //if inProgressGameData is undefined, that indicates that the game is not INPROGRESS
-				const inProgressGameData = inProgressGameDataWrapper.inProgressGameData
-				const PGN = convertToPGN(inProgressGameData);
-				openLichessAndPastePGN(PGN);
+		if(tabs[0]){ //This checks to make sure a chess.com tab is actually open
+			const tabId = tabs[0].id;
+			const messengerObject = {
+				message: "INPROGRESSANALYSISREQUEST"
 			}
-		});
+
+			chrome.tabs.sendMessage(tabId, messengerObject, (inProgressGameDataWrapper) => {
+				if (inProgressGameDataWrapper.inProgressGameData){ //if inProgressGameData is undefined, that indicates that the game is not INPROGRESS
+					const inProgressGameData = inProgressGameDataWrapper.inProgressGameData
+					const PGN = convertToPGN(inProgressGameData);
+					openLichessAndPastePGN(PGN);
+				}
+			});
+		}
 	});
 }
 

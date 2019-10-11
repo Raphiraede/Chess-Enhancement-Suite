@@ -3,10 +3,24 @@
     <head>
       <style>
         button {
-          height: 30px;
-          width: 50px;
-          font-size: 10px;
-          text-align: center;
+          color: #fff !important;
+          text-transform: uppercase;
+          text-decoration: none;
+          background: #ed3330;
+          height: 50px;
+          width: 200px;
+          border-radius: 5px;
+          border: none;
+          transition: all 0.4s ease 0s;
+          margin-left: 100px;
+        }
+        button:hover {
+          background: #d80808;
+          letter-spacing: 1px;
+          -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+          -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+          box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+          transition: all 0.4s ease 0s;
         }
 
         #popupWindow {
@@ -15,15 +29,29 @@
         }
 
         .listItem {
+          padding-top: 5px;
+          padding-bottom: 5px;
+          padding-left: 5px;
+          padding-right: 0px;
+          display: grid;
+          grid-template-columns: 10fr 1fr;
+          font-size: 13px;
+          grid-gap: 10px;
+          border: 1px solid transparent;
           cursor: pointer;
+        }
+
+        .listItem:hover {
+          border-radius: 15px;
+          border: 1px solid #000000;
         }
       </style>
     </head>
     <body>
       <div id=popupWindow>
-          <button id='INPROGRESSAnalysis'>Analysis</button>
+          <button id='INPROGRESSAnalysis'>Analyze</button>
           <div id="listOfGamesContainer">
-            <h1>Games:</h1>
+            <h1>Stored Games:</h1>
           </div>
       </div>
 
