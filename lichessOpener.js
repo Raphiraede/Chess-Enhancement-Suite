@@ -1,12 +1,12 @@
 async function openLichessAndPastePGN(PGN){
 	const tabId = await openLichess();
-	//Will handle the PGN request which lichessScript.js will send.
-	chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
-		if (message === "PGNForLichessScript"){
-			sendResponse({PGN:PGN});
-		}
-	});
-	chrome.tabs.executeScript(tabId, {file:'lichessScript.js'});
+	this.tabId = tabId
+	
+	chrome.storage.local.set({PGN}, () => { //Setting the PGN to local storage for lichessScript to retrieve
+		chrome.tabs.executeScript(tabId, {
+			file: "lichessScript.js"
+		})
+	})
 };
 
 

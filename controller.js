@@ -1,5 +1,6 @@
-	/*This file handles the install and handles messages. Uses functions from seperate background script files.*/
 
+	
+	/*This file handles the install and handles messages. Uses functions from seperate background script files.*/
 function storeNewGameData(newGameData) {
 	chrome.storage.local.get("allGamesData", (allGamesDataWrapper) => {
 		let allGamesData = allGamesDataWrapper.allGamesData;
@@ -31,7 +32,7 @@ function analyseInProgressGame(messengerObject){
 		}
 
 		chrome.tabs.sendMessage(tabId, messengerObject, (inProgressGameDataWrapper) => {
-			if (inProgressGameDataWrapper){
+			if (inProgressGameDataWrapper.inProgressGameData){ //if inProgressGameData is undefined, that indicates that the game is not INPROGRESS
 				const inProgressGameData = inProgressGameDataWrapper.inProgressGameData
 				const PGN = convertToPGN(inProgressGameData);
 				openLichessAndPastePGN(PGN);
@@ -60,7 +61,6 @@ chrome.runtime.onInstalled.addListener(function({OnInstalledReason = 'install'})
 //This is the master that almost all message requests
 chrome.runtime.onMessage.addListener((messengerObject, sender, sendResponse) => {
 	switch (messengerObject.message){
-
 		case "HYDRATEPOPUP":
 			hydratePopup();
 
@@ -70,12 +70,12 @@ chrome.runtime.onMessage.addListener((messengerObject, sender, sendResponse) => 
 			storeNewGameData(messengerObject.data);
 		break;
 
-		case "INPROGRESSANALYSISREQUEST":
-			analyseInProgressGame();
-		break;
-
 		case "ANALYSESTOREDGAME":
 			analyseStoredGame(messengerObject.data);
+		break;
+
+		case "INPROGRESSANALYSISREQUEST":
+			analyseInProgressGame();
 		break;
 	}
 })

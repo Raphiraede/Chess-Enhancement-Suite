@@ -6,8 +6,8 @@
 	"browser_action":{
 		"default_popup": "popup.html",
 		"default_icon":{
-			"48": "images/angryKnight48.png",
-			"128": "images/angryKnight128.png"
+			"48": "images/ChessEnhancementSuiteLogo.png",
+			"128": "images/ChessEnhancementSuiteLogo.png"
 		}
 	},
 	"permissions":["tabs", "storage", "activeTab", "https://lichess.org/paste"],
@@ -23,7 +23,7 @@
 		}
 	],
 	"icons": {
-		"48": "images/angryKnight48.png",
-		"128": "images/angryKnight128.png"
+		"48": "images/ChessEnhancementSuiteLogo.png",
+		"128": "images/ChessEnhancementSuiteLogo.png"
 	}
 }

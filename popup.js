@@ -7,10 +7,17 @@ function requestAnalysisForINPROGRESSGame(){
 	chrome.runtime.sendMessage(messengerObject);
 };
 
+function createFormattedDate(date){
+	let revivedDate = new Date(date)
+	const formattedDate = `${revivedDate.getMonth() + 1}/${revivedDate.getDate()}/${revivedDate.getFullYear()}, ${revivedDate.getHours()}:${revivedDate.getMinutes()}`;
+	return formattedDate;
+}
+
 function constructGameList(allGamesData){
 	let gameList = document.createElement("ul");
 	for (let i = allGamesData.length-1; i >= 0; i--){
-		let listItemTextContent = constructListItemTextContent(allGamesData[i]);
+		const formattedDate = createFormattedDate(allGamesData[i].date)
+		const listItemTextContent = constructListItemTextContent(allGamesData[i], formattedDate);
 		let gameListItem = document.createElement("li");
 		gameListItem.textContent = listItemTextContent;
 		gameListItem.id = allGamesData[i].id
@@ -23,15 +30,15 @@ function constructGameList(allGamesData){
 		}
 		//gameListItem.addEventListener("click", handleClick);
 		gameListItem.onclick = handleClick;
+		gameListItem.className = "listItem";
 		gameList.appendChild(gameListItem);
 	}
 
 	return gameList;
 }
 
-function constructListItemTextContent(gameData) {
-	const date = new Date(gameData.date);
-	const listItemTextContent = `${gameData.whiteUser} vs. ${gameData.blackUser}, ${date}`
+function constructListItemTextContent(gameData, formattedDate) {
+	const listItemTextContent = `${gameData.whiteUser} vs. ${gameData.blackUser}, ${formattedDate}`
 	return listItemTextContent;
 }
 

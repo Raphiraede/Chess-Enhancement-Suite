@@ -239,8 +239,6 @@ ChessGame.prototype.startRecording = function(){
 	this.checkGameState();
 }
 
-
-//@TODO Add a wait for page loaded
 let chessGame = new ChessGame();
 
 //This message handler handles request for incomplete dataset of an INPROGRESS game

@@ -5,23 +5,20 @@
  */
 
 
-function pastePGN(PGNWrapper){
-	const PGN = PGNWrapper.PGN;
+function pastePGN(PGN){
 	let textArea = document.querySelector("#form3-pgn");
 	textArea.value = PGN;
 }
 
 function clickImport(){
-	//importButton = document.querySelector(".submit button text[type = 'submit']");
 	importButton = document.querySelector(".submit");
 	importButton.click();
 }
 
 //This message is handled by lichessOpener.js, and NOT messageHandler.js
-const requestPgnAndOpenAnalysis = chrome.runtime.sendMessage (undefined, "PGNForLichessScript", function(PGN){
+chrome.storage.local.get("PGN", (PGNWrapper) => {
+	const PGN = PGNWrapper.PGN;
+	chrome.storage.local.remove("PGN");
 	pastePGN(PGN);
 	clickImport();
 });
-
-document.addEventListener("DOMContentLoaded", requestPgnAndOpenAnalysis);
-
