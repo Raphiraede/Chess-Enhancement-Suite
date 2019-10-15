@@ -2,7 +2,7 @@
 /*
  *Scrapes Data into ChessGame object
  *Uses Finite State Machine to track game state
- *At the conclusion of a chess game,sends data to messageHandler.js, where the data is recorded.
+ *At the conclusion of a chess game, sends data to controller.js, where the data is recorded.
  *Can send back an incomplete this.data object, which will include enough data to create a PGN, allowing the user to analyze a current board state mid-game
  */
 
@@ -129,7 +129,7 @@ ChessGame.prototype.updateUsernames = function(){
 /*remember, updateColor pulls usernames from different place than updateUsernames.*/
 ChessGame.prototype.updateColors = function(){
 	const lastNewGameChat = this.getLastNewGameChatComponent();
-	const usernamesInColorOrder = lastNewGameChat.querySelectorAll(".username");
+	if (lastNewGameChat) const usernamesInColorOrder = lastNewGameChat.querySelectorAll(".username");
 	if (usernamesInColorOrder.length === 2){
 		this.data.whiteUser = usernamesInColorOrder[0].innerHTML;
 		this.data.blackUser = usernamesInColorOrder[1].innerHTML;

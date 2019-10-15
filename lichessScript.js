@@ -15,7 +15,7 @@ function clickImport(){
 	importButton.click();
 }
 
-//This message is handled by lichessOpener.js, and NOT messageHandler.js
+//PGN is set by lichessOpener.js
 chrome.storage.local.get("PGN", (PGNWrapper) => {
 	const PGN = PGNWrapper.PGN;
 	chrome.storage.local.remove("PGN");
