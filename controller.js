@@ -23,6 +23,9 @@ function analyseStoredGame(gameID) {
 function analyseInProgressGame(messengerObject){
 	const queryInfo = {url: "*://www.chess.com/live*"}
 	chrome.tabs.query(queryInfo, (tabs) => {
+
+		//This if statement checks to make sure a chess.com tab is actually open.
+		//@TODO investigate the consequences of having multiple chess.com tabs open.
 		if(tabs[0]){ //This checks to make sure a chess.com tab is actually open
 			const tabId = tabs[0].id;
 			const messengerObject = {

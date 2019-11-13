@@ -6,7 +6,7 @@
  *Can send back an incomplete this.data object, which will include enough data to create a PGN, allowing the user to analyze a current board state mid-game
  */
 
- //Possible game states for ChessGame
+//Possible game states for ChessGame
 const ChessGameState = Object.freeze({
 	NOTSTARTED: "NOTSTARTED",
 	INPROGRESS: "INPROGRESS",
@@ -21,7 +21,7 @@ function ChessGame(){
 		opponentUsername: undefined,
 		whiteUser: undefined,
 		blackUser: undefined,
-		opening: undefined,
+		opening: undefined,//Not yet implemented, maybe unnecessary?
 		moves: [],
 		winner: undefined,
 		loser: undefined,
@@ -57,7 +57,7 @@ ChessGame.prototype.checkGameState = function(){
 			}
 		break;
 
-		//checks for endscreen to determine game end. moves and opening recorded here.
+		//checks for endscreen to determine game end and game result. moves and opening recorded here.
 		case ChessGameState.INPROGRESS:
 			this.updateMoves();
 			if(this.gameHasEnded()){
@@ -129,15 +129,16 @@ ChessGame.prototype.updateUsernames = function(){
 /*remember, updateColor pulls usernames from different place than updateUsernames.*/
 ChessGame.prototype.updateColors = function(){
 	const lastNewGameChat = this.getLastNewGameChatComponent();
-	if (lastNewGameChat) const usernamesInColorOrder = lastNewGameChat.querySelectorAll(".username");
-	if (usernamesInColorOrder.length === 2){
-		this.data.whiteUser = usernamesInColorOrder[0].innerHTML;
-		this.data.blackUser = usernamesInColorOrder[1].innerHTML;
-		return true;
+	let usernamesInColorOrder
+	if (lastNewGameChat){
+		usernamesInColorOrder = lastNewGameChat.querySelectorAll(".username");
+		if (usernamesInColorOrder.length === 2){ //This IF might be unnecessary. In fact, it's possible this might be inconsistant with primaryuser and opponent
+			this.data.whiteUser = usernamesInColorOrder[0].innerHTML;
+			this.data.blackUser = usernamesInColorOrder[1].innerHTML;
+			return true;
+		}
 	}
-	else{
-		return false;
-	}
+	return false;
 }
 
 //only used in in updateColors so far.
