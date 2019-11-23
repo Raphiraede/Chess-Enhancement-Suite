@@ -18,7 +18,7 @@ Don't tell the boys at chess.com though, they won't be too happy if they find ou
 Free? What? How is that possible? You mean I can improve my game with the world strongest chess engine at my fingertips for no cost at all? Where do I download this incredibly product?
 
 You download it right here: Please remember to rate my product!
-https://chrome.google.com/webstore/detail/chess-enhancement-suite/jpfehobmgoehehgfndokedhaejjjcobp?hl=en-US
+[Chess Enhancement Suite](https://chrome.google.com/webstore/detail/chess-enhancement-suite/jpfehobmgoehehgfndokedhaejjjcobp?hl=en-US)
 
 ### Contact me!
 If you have any comments, suggestions, feedback, or job offers ;), please feel free to email me at raphiraede@gmail.com.
