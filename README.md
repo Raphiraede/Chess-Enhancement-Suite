@@ -14,11 +14,12 @@ With the power of the worlds strongest chess engine at your fingertips, you lite
 Don't tell the boys at chess.com though, they won't be too happy if they find out.
 ***Seriously though you could totally get your chess.com account banned if you abuse this awesome feature too much***
 
-### The possibilities are endless
-I'm just one guy with a passion for chess and code who wants his extension to be as cool as possible.
-I plan to continue adding features, such as:
-- graph rendering,
-- maybe even my very own chess engine :O. Haha jk, what am I the DeepMind team?
+### It's absolutely free!
+Free? What? How is that possible? You mean I can improve my game with the world strongest chess engine at my fingertips for no cost at all? Where do I download this incredibly product?
+
+You download it right here: Please remember to rate my product!
+https://chrome.google.com/webstore/detail/chess-enhancement-suite/jpfehobmgoehehgfndokedhaejjjcobp?hl=en-US
 
 ### Contact me!
 If you have any comments, suggestions, feedback, or job offers ;), please feel free to email me at raphiraede@gmail.com.
+
